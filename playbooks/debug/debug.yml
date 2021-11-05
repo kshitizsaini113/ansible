@@ -1,0 +1,6 @@
+---
+- name: "Debugging values"
+  hosts: all
+  tasks:
+    - debug:
+        msg: "{{ ansible_user }}"
