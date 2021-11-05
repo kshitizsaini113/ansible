@@ -1,0 +1,62 @@
+---
+- name: "Installing and starting Apache WebServer"
+  hosts: "configured"
+  tasks:
+    - name: "Installing httpd package"
+      package:
+        name: "httpd"
+        state: "present"
+      when: ansible_distribution_file_variety=="RedHat"
+    - name: "Installing apache2 package"
+      package:
+        name: "apache2"
+        state: "present"
+      when: ansible_distribution_file_variety=="Debian"
+    - name: "Installing firewalld package - Debian"
+      package:
+        name: "firewalld"
+        state: "present"
+      when: ansible_distribution_file_variety=="Debian"
+    - name: "Installing the rsync package"
+      package:
+        name: "rsync"
+        state: "present"
+    - name: "Synchronizing the webite files"
+      synchronize:
+        src: "../../files/website/"
+        dest: "/var/www/html/"
+    - name: "Starting the firewalld services"
+      service:
+        name: "firewalld"
+        state: "started"
+        enabled: "true"
+    - name: "Starting the webserver - RedHat"
+      service:
+        name: "httpd"
+        state: "started"
+        enabled: "true"
+      when: ansible_distribution_file_variety=="RedHat"
+    - name: "Starting the webserver - Debian"
+      service:
+        name: "apache2"
+        state: "started"
+        enabled: "true"
+      when: ansible_distribution_file_variety=="Debian"
+    - name: "Adding firewall exception"
+      ansible.posix.firewalld:
+        port: "80/tcp"
+        permanent: "yes"
+        state: "enabled"
+        immediate: "yes"
+
+- name: "Verifying the Apache Services"
+  hosts: localhost
+  become: false
+  tasks:
+    - name: "Ensuring that the webServer is reachable"
+      uri:
+        url: "{{ item }}"
+        status_code: "200"
+      loop:
+        - "http://192.168.18.131:80"
+        - "http://192.168.18.132:80"
