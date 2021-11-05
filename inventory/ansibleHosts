@@ -1,0 +1,9 @@
+[debBased]
+ubuntu
+
+[rpmBased]
+alma
+
+[configured:children]
+debBased
+rpmBased
