@@ -1,0 +1,7 @@
+---
+- name: "Debugging Ansible Facts"
+  hosts: configured
+  tasks:
+    - name: "Printing the Facts variable"
+      debug:
+        var: "ansible_facts"
