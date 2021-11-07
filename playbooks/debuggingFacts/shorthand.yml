@@ -1,0 +1,25 @@
+---
+- name: "Shorthand for Ansible Facts"
+  hosts: "configured"
+  tasks:
+    - name: "Hostname"
+      debug:
+        var: ansible_facts['hostname']
+    - name: "Fully Qualified Domain Name"
+      debug:
+        var: ansible_facts['fqdn']
+    - name: "Default IPv4 address"
+      debug:
+        var: ansible_facts['default_ipv4']['address']
+    - name: "Network Interfaces List"
+      debug:
+        var: ansible_facts['interfaces']
+    - name: "Size of the /dev/nvme0n1 disk partition"
+      debug:
+        var: ansible_facts['devices']['nvme0n1']['size']
+    - name: "List of DNS Server"
+      debug:
+        var: ansible_facts['dns']['nameservers']
+    - name: "Version of running kernel"
+      debug:
+        var: ansible_facts['kernel']
